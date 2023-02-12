@@ -41,10 +41,14 @@ public class EmployeeRepository {
         int status = 0;
         try {
             Connection connection = EmployeeRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("insert into users(name,email,country) values (?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("insert into users(name,email,country," +
+                    "phone_number,salary,birthday) values (?,?,?,?,?,?)");
             ps.setString(1, employee.getName());
             ps.setString(2, employee.getEmail());
             ps.setString(3, employee.getCountry());
+            ps.setString(4, employee.getPhoneNumber());
+            ps.setInt(5, employee.getSalary());
+            ps.setString(6, employee.getBirthday());
 
             status = ps.executeUpdate();
             connection.close();
@@ -61,11 +65,15 @@ public class EmployeeRepository {
 
         try {
             Connection connection = EmployeeRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update users set name=?,email=?,country=? where id=?");
+            PreparedStatement ps = connection.prepareStatement("update users set name=?,email=?,country=?," +
+                    "phone_number=?,salary=?,birthday=? where id=?");
             ps.setString(1, employee.getName());
             ps.setString(2, employee.getEmail());
             ps.setString(3, employee.getCountry());
-            ps.setInt(4, employee.getId());
+            ps.setString(4, employee.getPhoneNumber());
+            ps.setInt(5, employee.getSalary());
+            ps.setString(6, employee.getBirthday());
+            ps.setInt(7, employee.getId());
 
             status = ps.executeUpdate();
             connection.close();
@@ -108,6 +116,9 @@ public class EmployeeRepository {
                 employee.setName(rs.getString(2));
                 employee.setEmail(rs.getString(3));
                 employee.setCountry(rs.getString(4));
+                employee.setPhoneNumber(rs.getString(5));
+                employee.setSalary(rs.getInt(6));
+                employee.setBirthday(rs.getString(7));
             }
             connection.close();
 
@@ -134,6 +145,9 @@ public class EmployeeRepository {
                 employee.setName(rs.getString(2));
                 employee.setEmail(rs.getString(3));
                 employee.setCountry(rs.getString(4));
+                employee.setPhoneNumber(rs.getString(5));
+                employee.setSalary(rs.getInt(6));
+                employee.setBirthday(rs.getString(7));
 
                 listEmployees.add(employee);
             }

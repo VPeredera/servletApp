@@ -22,12 +22,18 @@ public class PutServlet extends HttpServlet {
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String stringSalary = request.getParameter("salary");
+        int salary = Integer.parseInt(stringSalary);
 
         Employee employee = new Employee();
         employee.setId(id);
         employee.setName(name);
         employee.setEmail(email);
         employee.setCountry(request.getParameter("country"));
+        employee.setPhoneNumber(phoneNumber);
+        employee.setSalary(salary);
+        employee.setBirthday(request.getParameter("birthday"));
 
         int status = EmployeeRepository.update(employee);
 

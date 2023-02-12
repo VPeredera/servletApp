@@ -6,6 +6,9 @@ public class Employee {
     private String name;
     private String country;
     private String email;
+    private String phoneNumber;
+    private int salary;
+    private String birthday;
 
     public int getId() {
         return id;
@@ -39,6 +42,30 @@ public class Employee {
         this.email = email;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getSalary() {
+        return salary;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -46,6 +73,9 @@ public class Employee {
                 ", name='" + name + '\'' +
                 ", country='" + country + '\'' +
                 ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", salary=" + salary +
+                ", birthday='" + birthday + '\'' +
                 '}';
     }
 }
