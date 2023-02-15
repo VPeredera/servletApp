@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.Enumeration;
 
 @WebServlet("/deleteGameServlet")
 public class DeleteGameServlet extends HttpServlet {
@@ -16,13 +18,31 @@ public class DeleteGameServlet extends HttpServlet {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
+        Enumeration<String> parameterNames = request.getParameterNames();
+        String[] parameters = new String[] {"id"};
 
-        int status = GameRepository.delete(Integer.parseInt(request.getParameter("id")));
-        if (status > 0) {
-            response.sendRedirect("viewGameServlet");
-        } else {
-            out.print("Sorry! Unable to delete record");
+        try {
+            while (parameterNames.hasMoreElements()) {
+                String param = parameterNames.nextElement();
+                if (Arrays.stream(parameters).noneMatch(param::equals)) {
+                    throw new Exception();
+                }
+            }
+
+            int id = Integer.parseInt(request.getParameter("id"));
+            int status = GameRepository.delete(id);
+            if (status > 0) {
+                response.setStatus(301);
+                response.sendRedirect("viewGameServlet");
+            } else {
+                response.setStatus(404);
+                out.print("Game with id - " + id + " doesn't exist.");
+            }
+        } catch (Exception e) {
+            response.setStatus(400);
+            out.print("Parameters are invalid!");
+        } finally {
+            out.close();
         }
-        out.close();
     }
 }
