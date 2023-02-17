@@ -14,13 +14,17 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class LogoutServlet
  */
-@WebServlet("/LogoutServlet")
+@WebServlet("/logoutServlet")
 public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
+
         Cookie[] cookies = request.getCookies();
+        Cookie userNameCookieRemove = new Cookie("user", "");
+        userNameCookieRemove.setMaxAge(0);
+        response.addCookie(userNameCookieRemove);
         if(cookies != null){
             for(Cookie cookie : cookies){
                 if(cookie.getName().equals("JSESSIONID")){
@@ -29,7 +33,9 @@ public class LogoutServlet extends HttpServlet {
                 }
             }
         }
+
         HttpSession session = request.getSession(false);
+        System.out.println(">>> Logout from session");
         System.out.println("User="+session.getAttribute("user"));
         if(session != null){
             session.invalidate();

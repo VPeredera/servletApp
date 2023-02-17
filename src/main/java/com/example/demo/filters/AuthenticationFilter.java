@@ -2,11 +2,13 @@ package com.example.demo.filters;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 @WebFilter("/*")
 public class AuthenticationFilter implements Filter {
@@ -19,6 +21,7 @@ public class AuthenticationFilter implements Filter {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        this.context.log("Working \'doFilter\' in AuthenticationFilter");
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
@@ -37,13 +40,27 @@ public class AuthenticationFilter implements Filter {
                 uri.endsWith("demo/deleteGameServlet"))) {
             this.context.log("<<< Unauthorized access request");
             PrintWriter out = res.getWriter();
-            out.println("No access!!!");
+            if (uri.endsWith("demo/logoutServlet")){
+                out.println("You are already logout");
+            } else out.println("No access to: " + uri);
         } else {
+            if (session != null) {
+                this.context.log("::Session ID: " + session.getId());
+                this.context.log("::Creation time: " + new Date(session.getCreationTime()));
+                this.context.log("::Last accessed time: " + new Date(session.getLastAccessedTime()));
+            }
+            Cookie method = new Cookie("method", req.getMethod());
+            Cookie contextPath = new Cookie("context", req.getContextPath());
+            method.setMaxAge(30 * 60);
+            contextPath.setMaxAge(30 * 60);
+            res.addCookie(method);
+            res.addCookie(contextPath);
             chain.doFilter(request, response);
         }
     }
 
     public void destroy() {
         //close any resources here
+        this.context.log("<<< AuthenticationFilter destroyed");
     }
 }

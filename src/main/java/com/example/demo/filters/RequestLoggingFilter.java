@@ -17,10 +17,11 @@ public class RequestLoggingFilter implements Filter {
 
     public void init(FilterConfig fConfig) throws ServletException {
         this.context = fConfig.getServletContext();
-        this.context.log("RequestLoggingFilter initialized");
+        this.context.log(">>> RequestLoggingFilter initialized");
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        this.context.log("Working \'doFilter\' in RequestLoggingFilter");
         HttpServletRequest req = (HttpServletRequest) request;
         Enumeration<String> params = req.getParameterNames();
         while (params.hasMoreElements()) {
@@ -40,6 +41,7 @@ public class RequestLoggingFilter implements Filter {
     }
 
     public void destroy() {
+        this.context.log("<<< RequestLoggingFilter destroyed");
     }
 
 }
